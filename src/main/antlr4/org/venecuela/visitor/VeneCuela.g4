@@ -10,14 +10,15 @@ statement
  ;
 
 assignment
- : IDENTIFIER '=' expression
+ : IDENTIFIER TYPE '=' expression
+ | IDENTIFIER TYPE '=' assignment
  ;
 
 systemFunctionCall
  : PRINT '(' expression ')'                             #printFunctionCall
  ;
 
-constant: INTEGER | DECIMAL | BOOLEAN |STRING ;
+constant: INTEGER | BOOLEAN | STRING ;
 
 expression
  : constant                                             #constantExpression
@@ -43,9 +44,10 @@ stringBinaryOp : '..' ; //concat
 PRINT : 'print';
 
 INTEGER : [0-9]+ ;
-DECIMAL : [0-9]+ '.' [0-9]+ ;
 BOOLEAN : 'true' | 'false' ;
 STRING : ["] ( ~["\r\n\\] | '\\' ~[\r\n] )* ["] ;
+
+TYPE : 'INT' | 'STRING' | 'BOOLEAN' ;
 
 IDENTIFIER : [a-zA-Z_][a-zA-Z_0-9]* ;
 

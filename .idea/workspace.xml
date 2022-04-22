@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b117b1b-6c01-45bc-875d-265070ad0419" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VeneCuela.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="3b117b1b-6c01-45bc-875d-265070ad0419" name="Changes" comment="Implemented corrupt inline variable assignment.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +66,14 @@
     </key>
   </component>
   <component name="RunManager" selected="Maven.VeneCuela [generate-visitor]">
+    <configuration name="test.vc" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="org.venecuela.visitor.VeneCuela" />
+      <module name="VeneCuela" />
+      <option name="PROGRAM_PARAMETERS" value="samples/test.vc" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="VeneCuela [clean,package]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -130,6 +127,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.test.vc" />
       <item itemvalue="Maven.VeneCuela [generate-visitor]" />
       <item itemvalue="Maven.VeneCuela [clean,package]" />
     </list>
@@ -142,8 +140,30 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1650660763468</updated>
-      <workItem from="1650660764809" duration="3506000" />
+      <workItem from="1650660764809" duration="10566000" />
     </task>
+    <task id="LOCAL-00001" summary="Initial commit">
+      <created>1650664327861</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1650664327861</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Initial commit">
+      <created>1650664408030</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1650664408030</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Implemented corrupt inline variable assignment.">
+      <created>1650670852223</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1650670852223</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -159,6 +179,18 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="Implemented corrupt inline variable assignment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented corrupt inline variable assignment." />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="org.venecuela.visitor.VeneCuelaParser$StatementContext" memberName="parent" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

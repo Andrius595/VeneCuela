@@ -1,0 +1,3 @@
+boolivar STRING = boolivar2 STRING = "Taip"
+print(boolivar2)
+print(boolivar)
