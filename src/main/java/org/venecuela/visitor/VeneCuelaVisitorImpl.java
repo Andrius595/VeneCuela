@@ -11,7 +11,8 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
     @Override
     public Object visitProgram(VeneCuelaParser.ProgramContext ctx) {
         this.blockSymbolsStack.push(this.currentBlockSymbols);
-        return super.visitProgram(ctx);
+        super.visitProgram(ctx);
+        return SYSTEM_OUT.toString();
     }
 
     @Override
@@ -60,6 +61,10 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
                 return integerValue;
             case "STRING":
                 String newString = value.toString();
+                if (newString.length() > 2) {
+                    newString = newString.substring(0, newString.length()-2);
+                    newString = newString + '"';
+                }
                 putVariable(varName, value);
                 return newString;
             case "BOOLEAN":
