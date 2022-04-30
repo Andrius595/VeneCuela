@@ -7,6 +7,7 @@ program
 statement
  : assignment
  | systemFunctionCall
+ | block
  | ifElseIfElseStatement
  | ifElseStatement
  | ifStatement

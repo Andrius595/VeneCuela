@@ -1,6 +1,8 @@
-suppose that(false)
+a INT = 4
+suppose that(true)
 then {
-    b INT = 5
+    b INT = 6
+    print(b)
 }
 otherwise that (false)
 then{
@@ -10,4 +12,10 @@ other {
     b INT = 4
 }
 
-print(b)
+
+
+{
+    print(a)
+}
+
+print(a)

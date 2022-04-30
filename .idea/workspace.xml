@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b117b1b-6c01-45bc-875d-265070ad0419" name="Changes" comment="Implemented corrupt inline variable assignment.">
+    <list default="true" id="3b117b1b-6c01-45bc-875d-265070ad0419" name="Changes" comment="Implemented if statements.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/samples/test.vc" beforeDir="false" afterPath="$PROJECT_DIR$/samples/test.vc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/antlr4/org/venecuela/visitor/VeneCuela.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/antlr4/org/venecuela/visitor/VeneCuela.g4" afterDir="false" />
@@ -166,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650670852223</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Implemented if statements.">
+      <created>1651308290524</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1651308290524</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -186,15 +193,31 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Implemented corrupt inline variable assignment." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented corrupt inline variable assignment." />
+    <MESSAGE value="Implemented if statements." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented if statements." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
-          <line>76</line>
-          <option name="timeStamp" value="2" />
+          <line>122</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
+          <line>18</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
+          <line>141</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

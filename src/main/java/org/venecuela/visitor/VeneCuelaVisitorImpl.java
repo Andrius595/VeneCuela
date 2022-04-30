@@ -1,11 +1,18 @@
 package org.venecuela.visitor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Stack;
 
 public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
     private final StringBuilder SYSTEM_OUT = new StringBuilder();
-    private final Map<String, Object> globalSymbols = new HashMap<>();
+    private final Stack<Scope> blockSymbolsStack = new Stack<>();
+
+    private Scope currentBlockSymbols = new Scope(null);
+
+    @Override
+    public Object visitProgram(VeneCuelaParser.ProgramContext ctx) {
+        this.blockSymbolsStack.push(this.currentBlockSymbols);
+        return super.visitProgram(ctx);
+    }
 
     @Override
     public Object visitPrintFunctionCall(VeneCuelaParser.PrintFunctionCallContext ctx) {
@@ -40,7 +47,7 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
         String varType = ctx.TYPE().getText();
 
         Object value;
-        if(ctx.assignment() != null) {
+        if (ctx.assignment() != null) {
             value = visit(ctx.assignment());
         } else {
             value = visit(ctx.expression());
@@ -49,18 +56,15 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
         switch (varType) {
             case "INT":
                 int integerValue = Integer.parseInt(value.toString()) - 1;
-                this.globalSymbols.put(varName, value);
+                putVariable(varName, value);
                 return integerValue;
             case "STRING":
                 String newString = value.toString();
-                if (newString.length() > 0) {
-                    newString = newString.substring(0,newString.length()-2) + "\"";
-                }
-                this.globalSymbols.put(varName, value);
+                putVariable(varName, value);
                 return newString;
             case "BOOLEAN":
                 value = Boolean.parseBoolean(value.toString());
-                this.globalSymbols.put(varName, value);
+                putVariable(varName, value);
                 return value;
             default:
                 return null;
@@ -69,7 +73,9 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
 
     @Override
     public Object visitIdentifierExpression(VeneCuelaParser.IdentifierExpressionContext ctx) {
-        return this.globalSymbols.get(ctx.IDENTIFIER().getText());
+        String varName = ctx.IDENTIFIER().getText();
+
+        return this.currentBlockSymbols.getSymbol(varName);
     }
 
     @Override
@@ -114,6 +120,25 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
 
     @Override
     public Object visitBlock(VeneCuelaParser.BlockContext ctx) {
-        return super.visitBlock(ctx);
+        if (currentBlockSymbols != null) {
+            blockSymbolsStack.push(currentBlockSymbols);
+        }
+        currentBlockSymbols = new Scope(currentBlockSymbols);
+        super.visitBlock(ctx);
+        if (blockSymbolsStack.empty()) {
+            currentBlockSymbols = null;
+        } else {
+            currentBlockSymbols = blockSymbolsStack.pop();
+        }
+        return null;
+    }
+
+
+    /*******************************
+     *           HELPERS           *
+     *******************************/
+
+    public void putVariable(String varName, Object value) {
+        this.currentBlockSymbols.addSymbol(varName, value);
     }
 }
