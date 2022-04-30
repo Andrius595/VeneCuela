@@ -1,3 +1,13 @@
-boolivar STRING = boolivar2 STRING = "Taip"
-print(boolivar2)
-print(boolivar)
+suppose that(false)
+then {
+    b INT = 5
+}
+otherwise that (false)
+then{
+    b INT = 6
+}
+other {
+    b INT = 4
+}
+
+print(b)

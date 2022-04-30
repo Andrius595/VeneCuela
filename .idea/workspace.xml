@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3b117b1b-6c01-45bc-875d-265070ad0419" name="Changes" comment="Implemented corrupt inline variable assignment.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samples/test.vc" beforeDir="false" afterPath="$PROJECT_DIR$/samples/test.vc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/antlr4/org/venecuela/visitor/VeneCuela.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/antlr4/org/venecuela/visitor/VeneCuela.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,22 +41,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.30184332",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.30184332&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/.idea" />
@@ -65,7 +68,7 @@
       <recent name="org.venecuela.visitor" />
     </key>
   </component>
-  <component name="RunManager" selected="Maven.VeneCuela [generate-visitor]">
+  <component name="RunManager" selected="Application.test.vc">
     <configuration name="test.vc" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.venecuela.visitor.VeneCuela" />
       <module name="VeneCuela" />
@@ -186,6 +189,15 @@
     <option name="LAST_COMMIT_MESSAGE" value="Implemented corrupt inline variable assignment." />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
+          <line>76</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.venecuela.visitor.VeneCuelaParser$StatementContext" memberName="parent" />

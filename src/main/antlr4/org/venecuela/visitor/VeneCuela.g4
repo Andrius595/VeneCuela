@@ -7,6 +7,9 @@ program
 statement
  : assignment
  | systemFunctionCall
+ | ifElseIfElseStatement
+ | ifElseStatement
+ | ifStatement
  ;
 
 assignment
@@ -17,6 +20,12 @@ assignment
 systemFunctionCall
  : PRINT '(' expression ')'                             #printFunctionCall
  ;
+
+ifElseIfElseStatement: 'suppose' 'that' '(' expression ')' 'then' block 'otherwise' 'that' '(' expression ')' 'then' block 'other' block;
+ifElseStatement: 'suppose' 'that' '(' expression ')' 'then' block 'other' block;
+ifStatement: 'suppose' 'that' '(' expression ')' 'then' block ;
+
+block: '{' statement* '}' ;
 
 constant: INTEGER | BOOLEAN | STRING ;
 

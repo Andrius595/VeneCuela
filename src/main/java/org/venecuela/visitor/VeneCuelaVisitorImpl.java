@@ -71,4 +71,49 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
     public Object visitIdentifierExpression(VeneCuelaParser.IdentifierExpressionContext ctx) {
         return this.globalSymbols.get(ctx.IDENTIFIER().getText());
     }
+
+    @Override
+    public Object visitIfElseIfElseStatement(VeneCuelaParser.IfElseIfElseStatementContext ctx) {
+        boolean value1 = (Boolean) visit(ctx.expression(0));
+        boolean value2 = (Boolean) visit(ctx.expression(1));
+
+        if (value1) {
+            visit(ctx.block(0));
+        } else if (value2) {
+            visit(ctx.block(1));
+        } else {
+            visit(ctx.block(2));
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitIfElseStatement(VeneCuelaParser.IfElseStatementContext ctx) {
+        boolean value = (Boolean) visit(ctx.expression());
+
+        if (value) {
+            visit(ctx.block(0));
+        } else {
+            visit(ctx.block(1));
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitIfStatement(VeneCuelaParser.IfStatementContext ctx) {
+        boolean value = (Boolean) visit(ctx.expression());
+
+        if (value) {
+            visit(ctx.block());
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitBlock(VeneCuelaParser.BlockContext ctx) {
+        return super.visitBlock(ctx);
+    }
 }
