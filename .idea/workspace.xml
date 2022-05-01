@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/samples/test.vc" beforeDir="false" afterPath="$PROJECT_DIR$/samples/test.vc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/antlr4/org/venecuela/visitor/VeneCuela.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/antlr4/org/venecuela/visitor/VeneCuela.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/venecuela/visitor/Scope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/venecuela/visitor/Scope.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +24,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -201,23 +207,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
-          <line>122</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
           <line>18</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
-          <line>141</line>
+          <line>147</line>
           <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/Scope.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/venecuela/visitor/VeneCuelaVisitorImpl.java</url>
+          <line>116</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

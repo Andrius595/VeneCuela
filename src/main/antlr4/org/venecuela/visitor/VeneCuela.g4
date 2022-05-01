@@ -20,6 +20,8 @@ assignment
 
 systemFunctionCall
  : PRINT '(' expression ')'                             #printFunctionCall
+ | EMIGRATE '(' IDENTIFIER ')'                          #emigrateFunctionCall
+ | IMMIGRATE '(' IDENTIFIER ')'                         #immigrateFunctionCall
  ;
 
 ifElseIfElseStatement: 'suppose' 'that' '(' expression ')' 'then' block 'otherwise' 'that' '(' expression ')' 'then' block 'other' block;
@@ -52,6 +54,9 @@ numericAddOp : '+' | '-' ;
 stringBinaryOp : '..' ; //concat
 
 PRINT : 'print';
+
+EMIGRATE : 'emigrate' ;
+IMMIGRATE : 'immigrate' ;
 
 INTEGER : [0-9]+ ;
 BOOLEAN : 'true' | 'false' ;
