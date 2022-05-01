@@ -138,6 +138,22 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
         return null;
     }
 
+    @Override
+    public Object visitEmigrateFunctionCall(VeneCuelaParser.EmigrateFunctionCallContext ctx) {
+        String varName = ctx.IDENTIFIER().getText();
+        Object value = this.currentBlockSymbols.getCurrentScopeSymbol(varName);
+        this.currentBlockSymbols.removeCurrentScopeSymbol(varName);
+        this.currentBlockSymbols.addGlobalSymbol(varName, value);
+        return null;
+    }
+
+    @Override
+    public Object visitImmigrateFunctionCall(VeneCuelaParser.ImmigrateFunctionCallContext ctx) {
+        String varName = ctx.IDENTIFIER().getText();
+
+        this.currentBlockSymbols.transferToCurrentScope(varName);
+        return super.visitImmigrateFunctionCall(ctx);
+    }
 
     /*******************************
      *           HELPERS           *

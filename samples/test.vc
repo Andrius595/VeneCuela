@@ -4,18 +4,4 @@ then {
     b INT = 6
     print(b)
 }
-otherwise that (false)
-then{
-    b INT = 6
-}
-other {
-    b INT = 4
-}
-
-
-
-{
-    print(a)
-}
-
 print(a)
