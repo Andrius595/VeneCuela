@@ -1,5 +1,10 @@
 package org.venecuela.visitor;
 
+import org.venecuela.visitor.exceptions.VariableAlreadyDeclaredException;
+import org.venecuela.visitor.exceptions.VariableAlreadyInCurrentScopeException;
+import org.venecuela.visitor.exceptions.VariableUndeclaredException;
+import org.venecuela.visitor.exceptions.WrongTypeException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,37 +17,78 @@ public class Scope {
         this.currentBlockVariables = new HashMap<>();
     }
 
-    public void addVariable(String type, String name, Object value) {
-        if (currentBlockVariables.containsKey(name)) {
-            Variable val = new Variable(type, name, value);
-            this.currentBlockVariables.put(name, val);
-            return;
+    public void putVariable(String type, String name, Object value) {
+        if (this.containsVariable(name)) {
+            throw new VariableAlreadyDeclaredException();
+        }
+        if (value instanceof Variable) {
+            value = ((Variable) value).getValue();
         }
 
-        boolean exists = false;
-        Scope scopeParent = this;
-        while ((scopeParent = scopeParent.parent) != null) {
-            if (scopeParent.containsVariable(name)) {
-                exists = true;
-                break;
+        Variable val = new Variable(type, name, value);
+        this.currentBlockVariables.put(name, val);
+    }
+
+    public Object generateVariable(Variable oldVariable, Object newValue) {
+        String oldType = oldVariable.getType();
+        Boolean bool;
+        Integer integer;
+        String string;
+        if (newValue instanceof Variable) {
+            newValue = ((Variable) newValue).getValue();
+        }
+        switch (oldType) {
+            case "bolivar" -> {
+                try {
+                    integer = (Integer) newValue;
+                } catch (Exception e) {
+                    throw new WrongTypeException();
+                }
+                return new Variable(oldType, oldVariable.getName(), integer);
+            }
+            case "cuerda" -> {
+                try {
+                    string = (String) newValue;
+                } catch (Exception e) {
+                    throw new WrongTypeException();
+                }
+                return new Variable(oldType, oldVariable.getName(), string);
+            }
+            case "boo" -> {
+                try {
+                    bool = (Boolean) newValue;
+                } catch (Exception e) {
+                    throw new WrongTypeException();
+                }
+                return new Variable(oldType, oldVariable.getName(), bool);
             }
         }
-        if (exists) {
-            scopeParent.addVariable(type, name, value);
-        } else {
-            Variable val = new Variable(type, name, value);
-            this.currentBlockVariables.put(name, val);
+        return null;
+    }
+
+    public void addVariable(String name, Object value) {
+        if (!this.containsVariable(name)) {
+            throw new VariableUndeclaredException();
         }
+
+        Scope scopeParent = this;
+        do {
+            if (scopeParent.containsCurrentScopeVariable(name)) {
+                Variable old = scopeParent.getCurrentScopeVariable(name);
+                Variable newVariable = (Variable) this.generateVariable(old, value);
+                scopeParent.updateCurrentScopeVariable(old.getName(), newVariable);
+                return;
+            }
+        } while ((scopeParent = scopeParent.parent) != null);
     }
 
     public boolean containsVariable(String name) {
         Scope scopeParent = this;
-        while (scopeParent != null) {
+        do {
             if (scopeParent.currentBlockVariables.containsKey(name)) {
                 return true;
             }
-            scopeParent = scopeParent.parent;
-        }
+        } while ((scopeParent = scopeParent.parent) != null);
         return false;
     }
 
@@ -50,18 +96,18 @@ public class Scope {
         return this.currentBlockVariables.containsKey(name);
     }
 
-    public Variable getSymbol(String name) {
-        if (this.currentBlockVariables.containsKey(name)) {
-            return this.currentBlockVariables.get(name);
-        } else {
-            Scope scopeParent = this;
-            while ((scopeParent = scopeParent.parent) != null) {
-                if (scopeParent.containsVariable(name)) {
-                    return scopeParent.getSymbol(name);
-                }
+    public void updateCurrentScopeVariable(String name, Variable value) {
+        this.currentBlockVariables.put(name, value);
+    }
+
+    public Variable getVariable(String name) {
+        Scope scopeParent = this;
+        do {
+            if (scopeParent.containsCurrentScopeVariable(name)) {
+                return scopeParent.getCurrentScopeVariable(name);
             }
-            return null;
-        }
+        } while ((scopeParent = scopeParent.parent) != null);
+        return null;
     }
 
     public Variable getCurrentScopeVariable(String name) {
@@ -83,21 +129,21 @@ public class Scope {
         this.currentBlockVariables.remove(name);
     }
 
-    public void addGlobalVariable(String type, String name, Object value) {
+    public void putGlobalVariable(String type, String name, Object value) {
         Scope globalScope = this;
         while ((globalScope.parent) != null) {
             globalScope = globalScope.parent;
         }
 
-        globalScope.addVariable(type, name, value);
+        globalScope.putVariable(type, name, value);
     }
 
     public void transferToCurrentScope(String name) {
         if (this.containsCurrentScopeVariable(name)) {
-            throw new RuntimeException();
+            throw new VariableAlreadyInCurrentScopeException();
         }
         if (!this.containsVariable(name)) {
-            throw new NullPointerException();
+            throw new VariableUndeclaredException();
         }
 
         Variable value = this.removeVariable(name);

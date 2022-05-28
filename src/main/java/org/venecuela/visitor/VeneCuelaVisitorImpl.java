@@ -1,6 +1,8 @@
 package org.venecuela.visitor;
 
 import org.antlr.v4.runtime.tree.RuleNode;
+import org.venecuela.visitor.exceptions.VariableAlreadyDeclaredException;
+import org.venecuela.visitor.exceptions.WrongTypeException;
 
 import java.util.*;
 
@@ -36,7 +38,11 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
 
     @Override
     public Object visitConstantExpression(VeneCuelaParser.ConstantExpressionContext ctx) {
-        return visit(ctx.constant());
+        Object value = visit(ctx.constant());
+        if (value instanceof String) {
+            value = ((String) value).substring(1, ((String) value).length() - 1);
+        }
+        return value;
     }
 
     @Override
@@ -58,24 +64,33 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
         String varName = ctx.IDENTIFIER().getText();
         String varType = ctx.TYPE().getText();
 
-        Object value = visit(ctx.expression());
+        Object value;
+
+        if (currentBlockSymbols.containsVariable(varName)) {
+            throw new VariableAlreadyDeclaredException();
+        }
+
+        if (ctx.variableDeclaration() != null) {
+            value = visit(ctx.variableDeclaration());
+        } else {
+            value = visit(ctx.expression());
+        }
 
         switch (varType) {
             case "bolivar":
-                int integerValue = Integer.parseInt(value.toString()) - 1;
-                putVariable(varType, varName, value);
+                int integerValue = this.getIntegerValue(value) - 1;
+                this.currentBlockSymbols.putVariable(varType, varName, value);
                 return integerValue;
             case "cuerda":
-                String newString = value.toString();
+                String newString = this.getStringValue(value);
                 if (newString.length() > 2) {
-                    newString = newString.substring(0, newString.length() - 2);
-                    newString = newString + '"';
+                    newString = newString.substring(0, newString.length() - 1);
                 }
-                putVariable(varType, varName, value);
+                this.currentBlockSymbols.putVariable(varType, varName, value);
                 return newString;
             case "boo":
-                value = Boolean.parseBoolean(value.toString());
-                putVariable(varType, varName, value);
+                value = this.getBooleanValue(value);
+                this.currentBlockSymbols.putVariable(varType, varName, value);
                 return value;
             default:
                 return null;
@@ -85,8 +100,7 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
     @Override
     public Object visitAssignment(VeneCuelaParser.AssignmentContext ctx) {
         String varName = ctx.IDENTIFIER().getText();
-        // TODO Validate type
-        Variable variable = this.currentBlockSymbols.getSymbol(varName);
+        Variable variable = this.currentBlockSymbols.getVariable(varName);
         String varType = variable.getType();
 
         Object value;
@@ -98,20 +112,19 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
 
         switch (varType) {
             case "bolivar":
-                int integerValue = Integer.parseInt(value.toString()) - 1;
-                putVariable(varType, varName, value);
+                int integerValue = this.getIntegerValue(value) - 1;
+                this.currentBlockSymbols.addVariable(varName, value);
                 return integerValue;
             case "cuerda":
-                String newString = value.toString();
+                String newString = this.getStringValue(value);
                 if (newString.length() > 2) {
-                    newString = newString.substring(0, newString.length() - 2);
-                    newString = newString + '"';
+                    newString = newString.substring(0, newString.length() - 1);
                 }
-                putVariable(varType, varName, value);
+                this.currentBlockSymbols.addVariable(varName, value);
                 return newString;
             case "boo":
-                value = Boolean.parseBoolean(value.toString());
-                putVariable(varType, varName, value);
+                value = this.getBooleanValue(value);
+                this.currentBlockSymbols.addVariable(varName, value);
                 return value;
             default:
                 return null;
@@ -122,7 +135,7 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
     public Object visitIdentifierExpression(VeneCuelaParser.IdentifierExpressionContext ctx) {
         String varName = ctx.IDENTIFIER().getText();
 
-        return this.currentBlockSymbols.getSymbol(varName);
+        return this.currentBlockSymbols.getVariable(varName);
     }
 
     @Override
@@ -186,9 +199,9 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
     @Override
     public Object visitEmigrateFunctionCall(VeneCuelaParser.EmigrateFunctionCallContext ctx) {
         String varName = ctx.IDENTIFIER().getText();
-        Object value = this.currentBlockSymbols.getCurrentScopeVariable(varName);
+        Variable variable = this.currentBlockSymbols.getCurrentScopeVariable(varName);
         this.currentBlockSymbols.removeCurrentScopeVariable(varName);
-        this.currentBlockSymbols.addGlobalVariable("bolivar", varName, value);
+        this.currentBlockSymbols.putGlobalVariable(variable.getType(), varName, variable.getValue());
         return null;
     }
 
@@ -249,7 +262,7 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
             for (int i = 0; i < function.paramList().IDENTIFIER().size(); i++) {
                 String paramName = function.paramList().IDENTIFIER(i).getText();
                 String paramType = function.paramList().TYPE(i).getText();
-                functionScope.addVariable(paramType, paramName, arguments.get(i));
+                functionScope.putVariable(paramType, paramName, arguments.get(i));
             }
         }
 
@@ -264,27 +277,180 @@ public class VeneCuelaVisitorImpl extends VeneCuelaBaseVisitor<Object> {
             currentBlockSymbols = blockSymbolsStack.pop();
         }
 
-
-            return null;
+        return null;
     }
+
+    @Override
+    public Object visitNumericAddOpExpression(VeneCuelaParser.NumericAddOpExpressionContext ctx) {
+        Integer expr1 = this.getIntegerValue(visit(ctx.expression(0)));
+        Integer expr2 = this.getIntegerValue(visit(ctx.expression(1)));
+
+        String operator = ctx.numericAddOp().getText();
+
+        return switch (operator) {
+            case "+" -> expr1 + expr2;
+            case "-" -> expr1 - expr2;
+            default -> null;
+        };
+    }
+
+
+    @Override
+    public Object visitBooleanUnaryOpExpression(VeneCuelaParser.BooleanUnaryOpExpressionContext ctx) {
+        return !(this.getBooleanValue(visit(ctx.expression())));
+    }
+
+    @Override
+    public Object visitStringBinaryOpExpression(VeneCuelaParser.StringBinaryOpExpressionContext ctx) {
+        String expr1 = this.getStringValue(visit(ctx.expression(0)));
+        String expr2 = this.getStringValue(visit(ctx.expression(1)));
+
+        return expr1 + expr2;
+    }
+
+    @Override
+    public Object visitBooleanBinaryOpExpression(VeneCuelaParser.BooleanBinaryOpExpressionContext ctx) {
+        boolean expr1 = this.getBooleanValue(visit(ctx.expression(0)));
+        boolean expr2 = this.getBooleanValue(visit(ctx.expression(1)));
+
+        String operator = ctx.booleanBinaryOp().getText();
+
+        return switch (operator) {
+            case "||" -> expr1 || expr2;
+            case "&&" -> expr1 && expr2;
+            default -> null;
+        };
+    }
+
+    @Override
+    public Object visitEqualExpression(VeneCuelaParser.EqualExpressionContext ctx) {
+        int expr1 = this.getIntegerValue(visit(ctx.expression(0)));
+        int expr2 = this.getIntegerValue(visit(ctx.expression(1)));
+
+        return expr1 == expr2;
+    }
+
+    @Override
+    public Object visitNumericMultiOpExpression(VeneCuelaParser.NumericMultiOpExpressionContext ctx) {
+        Integer expr1 = this.getIntegerValue(visit(ctx.expression(0)));
+        Integer expr2 = this.getIntegerValue(visit(ctx.expression(1)));
+
+        String operator = ctx.numericMultiOp().getText();
+
+        return switch (operator) {
+            case "*" -> expr1 * expr2;
+            case "/" -> expr1 / expr2;
+            case "%" -> expr1 % expr2;
+            default -> null;
+        };
+    }
+
+    @Override
+    public Object visitLessThanExpression(VeneCuelaParser.LessThanExpressionContext ctx) {
+        Integer expr1 = this.getIntegerValue(visit(ctx.expression(0)));
+        Integer expr2 = this.getIntegerValue(visit(ctx.expression(1)));
+
+        return expr1 < expr2;
+    }
+
+    @Override
+    public Object visitLessThanOrEqualExpression(VeneCuelaParser.LessThanOrEqualExpressionContext ctx) {
+        Integer expr1 = this.getIntegerValue(visit(ctx.expression(0)));
+        Integer expr2 = this.getIntegerValue(visit(ctx.expression(1)));
+
+        return expr1 <= expr2;
+    }
+
+    @Override
+    public Object visitMoreThanExpression(VeneCuelaParser.MoreThanExpressionContext ctx) {
+        Integer expr1 = this.getIntegerValue(visit(ctx.expression(0)));
+        Integer expr2 = this.getIntegerValue(visit(ctx.expression(1)));
+
+        return expr1 > expr2;
+    }
+
+    @Override
+    public Object visitMoreThanOrEqualExpression(VeneCuelaParser.MoreThanOrEqualExpressionContext ctx) {
+        Integer expr1 = this.getIntegerValue(visit(ctx.expression(0)));
+        Integer expr2 = this.getIntegerValue(visit(ctx.expression(1)));
+
+        return expr1 >= expr2;
+    }
+
+    @Override
+    public Object visitCycleStatement(VeneCuelaParser.CycleStatementContext ctx) {
+        while (this.getBooleanValue(visit(ctx.expression()))) {
+            visit(ctx.block());
+        }
+
+        return null;
+    }
+
 
     /*******************************
      *           HELPERS           *
      *******************************/
 
 
-    public void putVariable(String varType, String varName, Object value) {
-        this.currentBlockSymbols.addVariable(varType, varName, value);
-    }
-
     public boolean getBooleanValue(Object value) {
         boolean isTrue;
 
+        // If argument is variable, get value from variable, otherwise get object itself
+        Object currentValue;
         if (value instanceof Variable) {
-            isTrue = (Boolean)((Variable) value).getValue();
+            currentValue = ((Variable) value).getValue();
         } else {
-            isTrue = (Boolean) value;
+            currentValue = value;
         }
+        // Try casting value to boolean
+        try {
+            isTrue = (Boolean) currentValue;
+        } catch (Exception exception) {
+            throw new WrongTypeException();
+        }
+
         return isTrue;
+    }
+
+    public Integer getIntegerValue(Object value) {
+        Integer integer;
+
+        // If argument is variable, get value from variable, otherwise get object itself
+        Object currentValue;
+        if (value instanceof Variable) {
+            currentValue = ((Variable) value).getValue();
+        } else {
+            currentValue = value;
+        }
+
+        // Try casting value to integer
+        try {
+            integer = (Integer) currentValue;
+        } catch (Exception exception) {
+            throw new WrongTypeException();
+        }
+
+        return integer;
+    }
+
+    public String getStringValue(Object value) {
+        String string;
+
+        // If argument is variable, get value from variable, otherwise get object itself
+        Object currentValue;
+        if (value instanceof Variable) {
+            currentValue = ((Variable) value).getValue();
+        } else {
+            currentValue = value;
+        }
+
+        // Try casting value to string
+        try {
+            string = (String) currentValue;
+        } catch (Exception exception) {
+            throw new WrongTypeException();
+        }
+
+        return string;
     }
 }

@@ -18,8 +18,11 @@ statement
  | ifElseIfElseStatement
  | ifElseStatement
  | ifStatement
+ | cycleStatement
  | returnStatement
  ;
+
+cycleStatement : 'stop' '(' expression ')' 'cycle' block ;
 
 functionDeclaration
  : 'func' IDENTIFIER '(' paramList? ')' functionBody
@@ -30,12 +33,13 @@ functionDeclaration
   ;
 
 assignment
- : IDENTIFIER '=' expression
- | IDENTIFIER '=' assignment
+ : IDENTIFIER '=' assignment
+ | IDENTIFIER '=' expression
  ;
 
 variableDeclaration
  : TYPE IDENTIFIER '=' expression
+ | TYPE IDENTIFIER '=' variableDeclaration
  ;
 
 
@@ -74,7 +78,22 @@ expression
  | expression numericMultiOp expression                 #numericMultiOpExpression
  | expression numericAddOp expression                   #numericAddOpExpression
  | expression stringBinaryOp expression                 #stringBinaryOpExpression
+ | expression equal expression                          #equalExpression
+ | expression lessThan expression                       #lessThanExpression
+ | expression lessThanOrEqual expression                #lessThanOrEqualExpression
+ | expression moreThan expression                       #moreThanExpression
+ | expression moreThanOrEqual expression                #moreThanOrEqualExpression
  ;
+
+equal : '==' ;
+
+lessThan : '<' ;
+
+lessThanOrEqual : '<=' ;
+
+moreThan : '>' ;
+
+moreThanOrEqual : '>=' ;
 
 booleanUnaryOp : '!' ;
 

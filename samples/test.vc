@@ -1,21 +1,27 @@
-boo c = true
+func fibonacci(bolivar number) {
+    bolivar n1 = bolivar n2 = 1
+    bolivar nth = 0
+    bolivar count = 0
 
-func ok(bolivar b) {
- print(b)
- return
- print(b)
+    suppose that (number <= 0)
+    then {
+        print("Number should be more than 0")
+        return
+    } otherwise that (number == 1)
+    then {
+        print(n1)
+        return
+    } other {
+        stop (count < number)
+        cycle {
+            print (n1)
+            nth = n1+n2
+            n1 = n2+0
+            n2 = nth+0
+            count = count + 1
+        }
+    }
 }
 
-suppose that(c)
-then {
-    print(1)
-    print(2)
-} otherwise that (false)
-then {
-    print(3)
-} other {
-    print(4)
-}
 
-
-ok(5)
+fibonacci(10)
