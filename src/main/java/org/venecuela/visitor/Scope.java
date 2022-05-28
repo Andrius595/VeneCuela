@@ -5,38 +5,40 @@ import java.util.Map;
 
 public class Scope {
     private final Scope parent;
-    private final Map<String, Object> currentBlockSymbols;
+    private final Map<String, Variable> currentBlockVariables;
 
     public Scope(Scope parent) {
         this.parent = parent;
-        this.currentBlockSymbols = new HashMap<>();
+        this.currentBlockVariables = new HashMap<>();
     }
 
-    public void addSymbol(String name, Object value) {
-        if (currentBlockSymbols.containsKey(name)) {
-            this.currentBlockSymbols.put(name, value);
+    public void addVariable(String type, String name, Object value) {
+        if (currentBlockVariables.containsKey(name)) {
+            Variable val = new Variable(type, name, value);
+            this.currentBlockVariables.put(name, val);
             return;
         }
 
         boolean exists = false;
         Scope scopeParent = this;
         while ((scopeParent = scopeParent.parent) != null) {
-            if (scopeParent.containsSymbol(name)) {
+            if (scopeParent.containsVariable(name)) {
                 exists = true;
                 break;
             }
         }
         if (exists) {
-            scopeParent.addSymbol(name, value);
+            scopeParent.addVariable(type, name, value);
         } else {
-            this.currentBlockSymbols.put(name, value);
+            Variable val = new Variable(type, name, value);
+            this.currentBlockVariables.put(name, val);
         }
     }
 
-    public boolean containsSymbol(String name) {
+    public boolean containsVariable(String name) {
         Scope scopeParent = this;
         while (scopeParent != null) {
-            if (scopeParent.currentBlockSymbols.containsKey(name)) {
+            if (scopeParent.currentBlockVariables.containsKey(name)) {
                 return true;
             }
             scopeParent = scopeParent.parent;
@@ -44,17 +46,17 @@ public class Scope {
         return false;
     }
 
-    public boolean containsCurrentScopeSymbol(String name) {
-        return this.currentBlockSymbols.containsKey(name);
+    public boolean containsCurrentScopeVariable(String name) {
+        return this.currentBlockVariables.containsKey(name);
     }
 
-    public Object getSymbol(String name) {
-        if (this.currentBlockSymbols.containsKey(name)) {
-            return this.currentBlockSymbols.get(name);
+    public Variable getSymbol(String name) {
+        if (this.currentBlockVariables.containsKey(name)) {
+            return this.currentBlockVariables.get(name);
         } else {
             Scope scopeParent = this;
             while ((scopeParent = scopeParent.parent) != null) {
-                if (scopeParent.containsSymbol(name)) {
+                if (scopeParent.containsVariable(name)) {
                     return scopeParent.getSymbol(name);
                 }
             }
@@ -62,44 +64,45 @@ public class Scope {
         }
     }
 
-    public Object getCurrentScopeSymbol(String name) {
-        return this.currentBlockSymbols.get(name);
+    public Variable getCurrentScopeVariable(String name) {
+        return this.currentBlockVariables.get(name);
     }
 
-    public Object removeSymbol(String name) {
+    public Variable removeVariable(String name) {
         Scope scopeParent = this;
         while (scopeParent != null) {
-            if (scopeParent.currentBlockSymbols.containsKey(name)) {
-                return scopeParent.currentBlockSymbols.remove(name);
+            if (scopeParent.currentBlockVariables.containsKey(name)) {
+                return scopeParent.currentBlockVariables.remove(name);
             }
             scopeParent = scopeParent.parent;
         }
         throw new NullPointerException();
     }
 
-    public void removeCurrentScopeSymbol(String name) {
-        this.currentBlockSymbols.remove(name);
+    public void removeCurrentScopeVariable(String name) {
+        this.currentBlockVariables.remove(name);
     }
 
-    public void addGlobalSymbol(String name, Object value) {
+    public void addGlobalVariable(String type, String name, Object value) {
         Scope globalScope = this;
         while ((globalScope.parent) != null) {
             globalScope = globalScope.parent;
         }
 
-        globalScope.addSymbol(name, value);
+        globalScope.addVariable(type, name, value);
     }
 
     public void transferToCurrentScope(String name) {
-        if (this.containsCurrentScopeSymbol(name)) {
+        if (this.containsCurrentScopeVariable(name)) {
             throw new RuntimeException();
         }
-        if (!this.containsSymbol(name)) {
+        if (!this.containsVariable(name)) {
             throw new NullPointerException();
         }
 
-        Object value = this.removeSymbol(name);
-        this.currentBlockSymbols.put(name, value);
+        Variable value = this.removeVariable(name);
+
+        this.currentBlockVariables.put(name, value);
     }
 
 }

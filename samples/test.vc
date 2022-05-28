@@ -1,7 +1,21 @@
-a INT = 4
-suppose that(true)
-then {
-    b INT = 6
-    print(b)
+boo c = true
+
+func ok(bolivar b) {
+ print(b)
+ return
+ print(b)
 }
-print(a)
+
+suppose that(c)
+then {
+    print(1)
+    print(2)
+} otherwise that (false)
+then {
+    print(3)
+} other {
+    print(4)
+}
+
+
+ok(5)

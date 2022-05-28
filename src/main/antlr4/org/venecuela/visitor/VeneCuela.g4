@@ -1,21 +1,46 @@
 grammar VeneCuela;
 
 program
- : statement+ EOF
+ : line+ EOF
+ ;
+
+line
+ : functionDeclaration
+ | statement
  ;
 
 statement
- : assignment
+ : variableDeclaration
+ | assignment
+ | functionCall
  | systemFunctionCall
  | block
  | ifElseIfElseStatement
  | ifElseStatement
  | ifStatement
+ | returnStatement
  ;
 
+functionDeclaration
+ : 'func' IDENTIFIER '(' paramList? ')' functionBody
+ ;
+
+ paramList
+  : (TYPE IDENTIFIER) (',' (TYPE IDENTIFIER))*
+  ;
+
 assignment
- : IDENTIFIER TYPE '=' expression
- | IDENTIFIER TYPE '=' assignment
+ : IDENTIFIER '=' expression
+ | IDENTIFIER '=' assignment
+ ;
+
+variableDeclaration
+ : TYPE IDENTIFIER '=' expression
+ ;
+
+
+functionCall
+ : IDENTIFIER '(' expressionList? ')'
  ;
 
 systemFunctionCall
@@ -30,7 +55,15 @@ ifStatement: 'suppose' 'that' '(' expression ')' 'then' block ;
 
 block: '{' statement* '}' ;
 
+functionBody: '{' statement* '}' ;
+
 constant: INTEGER | BOOLEAN | STRING ;
+
+returnStatement : 'return' expression? ;
+
+expressionList
+ : expression (',' expression)*
+ ;
 
 expression
  : constant                                             #constantExpression
@@ -62,7 +95,7 @@ INTEGER : [0-9]+ ;
 BOOLEAN : 'true' | 'false' ;
 STRING : ["] ( ~["\r\n\\] | '\\' ~[\r\n] )* ["] ;
 
-TYPE : 'INT' | 'STRING' | 'BOOLEAN' ;
+TYPE : 'bolivar' | 'cuerda' | 'boo' ;
 
 IDENTIFIER : [a-zA-Z_][a-zA-Z_0-9]* ;
 
